@@ -1,0 +1,187 @@
+{{ "slick.css" | asset_url | stylesheet_tag }}
+{{ "slick-theme.css" | asset_url | stylesheet_tag }}
+{{ "style.css" | asset_url | stylesheet_tag }}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript" async defer></script>
+<script src="https://code.jquery.com/jquery-migrate-3.4.0.min.js" async defer></script>
+{% comment %} {{ "slick.js" | asset_url | script_tag }} {% endcomment %}
+<script>
+  function loadSlick() {
+    // Check if jQuery is defined
+    if (typeof jQuery !== 'undefined') {
+      // Load slick.js using jQuery.getScript()
+      jQuery.getScript("{{ 'slick.js' | asset_url }}", function() {
+        // Slick.js has been loaded
+        console.log('Slick.js has been loaded.');
+      
+      });
+    } else {
+      // jQuery is not defined, wait and try again
+      setTimeout(loadSlick, 50);
+    }
+  }
+
+  // Call the function to load slick.js
+  loadSlick();
+</script>
+<section>
+  <div class="review-header" >
+    <h2 >Our Customers</h2>
+    <a id="review-link" href="" target="_blank" ><img class="review-logo" width="auto" height="auto" src="{{ 'google-logo.png' | asset_url }}" /></a>
+  </div>
+  <div id="review-container" class="regular slider">
+  </div>
+</section>
+<script async defer>
+  const appURL=`https://google-map-review-importer.gadget.app`;
+  function onSlick(){
+    console.log('Attempting Slicking')
+    if($&&$().slick){
+      $(".vertical-center-4").slick({
+        dots: true,
+        vertical: true,
+        centerMode: true,
+        slidesToShow: 4,
+        slidesToScroll: 2
+      });
+      $(".vertical-center-3").slick({
+        dots: true,
+        vertical: true,
+        centerMode: true,
+        slidesToShow: 3,
+        slidesToScroll: 3
+      });
+      $(".vertical-center-2").slick({
+        dots: true,
+        vertical: true,
+        centerMode: true,
+        slidesToShow: 2,
+        slidesToScroll: 2
+      });
+      $(".vertical-center").slick({
+        dots: true,
+        vertical: true,
+        centerMode: true,
+      });
+      $(".vertical").slick({
+        dots: true,
+        vertical: true,
+        slidesToShow: 3,
+        slidesToScroll: 3
+      });
+      $(".regular").slick({
+        dots: true,
+        infinite: true,
+        slidesToShow: 4,
+        slidesToScroll: 3,
+        responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2,
+            infinite: true,
+            dots: true
+          }
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+      ]
+      });
+      $(".center").slick({
+        dots: true,
+        infinite: true,
+        centerMode: true,
+        slidesToShow: 5,
+        slidesToScroll: 3
+      });
+      $(".variable").slick({
+        dots: true,
+        infinite: true,
+        variableWidth: true
+      });
+      $(".lazy").slick({
+        lazyLoad: 'ondemand', 
+        infinite: true
+      });
+      $("div.review-readmore-panel").click(function(e){
+        // console.log(e)
+      })
+    }else{
+      setTimeout(() => {
+        onSlick();
+      }, 500);
+    }
+  }
+  
+  window.onload=async function() {
+    var reviewContainer=document.getElementById('review-container')
+    var reviewLink=document.getElementById('review-link');
+    const shopResponse=await fetch(`${appURL}/shops/${Shopify.shop}`);
+    const shopData=await shopResponse.json()
+    const shopId=shopData.id;
+    const MyPlace=shopData.place;
+    const reviewsResponse=await fetch(`${appURL}/reviews/${shopId}`);
+    const reviewsData=await reviewsResponse.json();
+    if(MyPlace) await reviewLink.setAttribute('href',`https://search.google.com/local/writereview?placeid=${MyPlace}`);
+    else reviewLink.innerHTML=""
+    await reviewsData.map((oneReview,index)=>{
+      reviewContainer.innerHTML+=`
+        <div class="item slider-item" style="width:80%" >
+          <div class="review-author">
+            ${oneReview.profile_photo_url?'<img class="review-avatar" src="'+oneReview.profile_photo_url+'" alt="image" />':""}
+            <div class="review-info"  >
+              <h4 >${oneReview.author_name&&oneReview.author_name}</h4>
+              <p>${oneReview.date?oneReview.date:""}</p>
+            </div>
+          </div>
+            <div class="review-rating" >
+              
+                ${0<oneReview.rating?"★":"☆"}
+                ${1<oneReview.rating?"★":"☆"}
+                ${2<oneReview.rating?"★":"☆"}
+                ${3<oneReview.rating?"★":"☆"}
+                ${4<oneReview.rating?"★":"☆"}
+            </div>
+            <div id="review-content" class="review-content-panel-general">
+              <p class="review-text" >${oneReview.text}</p>
+            </div>
+            
+          <img style="float:right;width:10%;margin-right:10px;margin-bottom:10px;" src="{{ "google-icon.png" | asset_url }}" />
+        </div>
+      `;
+    });
+    onSlick()
+    
+  };
+  function expand(e){
+    var contentPanel=e.parentElement.getElementsByClassName("review-content-panel-general")[0];
+    console.log(contentPanel)
+    if(contentPanel.className=="review-content-panel-general review-fold")
+      contentPanel.className='review-content-panel-general';
+    else contentPanel.className="review-content-panel-general review-fold"
+  }
+  
+</script>
+{% schema %}
+{
+  "name": "Google Map Review Widget",
+  "target": "section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "product", "autofill": true },
+    { "type": "color", "id": "colour", "label": "Star Colour", "default": "#ff0000" }
+  ]
+}
+{% endschema %}
+

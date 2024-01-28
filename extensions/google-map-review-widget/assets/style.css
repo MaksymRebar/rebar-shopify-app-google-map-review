@@ -1,0 +1,97 @@
+
+.slider-item{
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 5px;
+    margin: 10px;
+}
+.review-content-panel-general{
+    max-height: 25vh;
+    overflow: hidden;
+    transition-delay: 0s;
+    -webkit-transition-delay: 0s;
+    transition-duration: 3s;
+    -webkit-transition-duration: 3s;
+    transition-timing-function: linear;
+}
+.review-content-panel-general:hover{
+    max-height: 10000px;
+    transition-delay: 0s;
+    -webkit-transition-delay: 0s;
+    transition-duration: 3s;
+    -webkit-transition-duration: 3s;
+    transition-timing-function: linear;
+}
+.review-fold{
+    height: 25vh;
+    max-height: 25vh;
+    min-height: 25vh;
+    overflow: hidden;
+    transition: 0.5s;
+}
+.review-readmore-panel{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 30px;
+    background-color: lightgray;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+.review-readmore-panel:hover{
+    background-color: #dddddd;
+}
+.review-avatar{
+    width:20%;
+    height: auto;
+    display: inline-block;
+    margin-left: 5%;
+    /* margin-top: 10px; */
+    align-items: center;
+}
+.review-name{
+    display: inline-block;
+    margin-left: 5%;
+    /* margin-top: 10px; */
+    align-items: center;
+}
+.review-info{
+    /* display: inline-block; */
+    margin-left: 5%;
+    /* margin-top: 10px; */
+    /* align-items: center; */
+}
+.review-text{
+    word-wrap: break-word;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.review-rating{
+    width: 100%;
+    color: gold;
+    margin-left: 20%;
+    margin-top: 0;
+    font-size: x-large;
+}
+.review-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.review-author{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+.review-logo{
+    width: 10vw;
+    display: inline;
+    margin-left:20px;
+}
+@media only screen and (max-width: 600px) {
+    .review-logo{
+        width: 20%;
+    }
+}
